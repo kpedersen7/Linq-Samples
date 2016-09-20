@@ -1,4 +1,4 @@
-<Query Kind="Expression">
+<Query Kind="Statements">
   <Connection>
     <ID>bc6073ae-bf04-42ca-8dc7-72ea1e2524e2</ID>
     <Persist>true</Persist>
@@ -54,3 +54,45 @@ select new {
 	TotalPriceForAlbum = x.Tracks.Sum(y => y.UnitPrice),
 	AverageTrackLength = (x.Tracks.Average(y => y.Milliseconds)) / 1000
 }
+
+//---------------------
+//C# Statements
+//A statement has a receiving variable which is set by the results of the query
+//When you need to use multiple steps to solve a problem, switch your language choice to either:
+// Statement(s) or Program
+var maxCount = (from x in MediaTypes
+				select x.Tracks.Count()).Max();
+//to display the contents of a variable in LinqPad, 
+//you use the method .Dump()
+//maxCount.Dump();
+
+//-------------------
+//to filter data, you can use the WHERE clause
+var mediaTypeCounts = from x in MediaTypes
+						where x.Tracks.Count() == maxCount 
+						select new {
+							Name = x.Name,
+							TrackCount = x.Tracks.Count()
+						};
+	mediaTypeCounts.Dump();
+//above example uses maxCount, instantiated in the previous example, but 
+//we can nest the query used to make maxCount
+//directly into our next example, so it can be run independently of the one above it.
+var mediaTypeCounts = from x in MediaTypes
+						where x.Tracks.Count() == (from y in MediaTypes
+												select y.Tracks.Count()).Max() 
+						select new {
+							Name = x.Name,
+							TrackCount = x.Tracks.Count()
+						};
+	mediaTypeCounts.Dump();
+
+//using a method syntax to determine the Count() value for the Where expression
+//this demonstrates that queries can be constructed using both query syntax and method syntax
+var mediaTypeCountsMethod = from x in MediaTypes
+						where x.Tracks.Count() == MediaTypes.Select(y => y.Tracks.Count()).Max()
+						select new {
+							Name = x.Name,
+							TrackCount = x.Tracks.Count()
+						};
+	mediaTypeCountsMethod.Dump();
