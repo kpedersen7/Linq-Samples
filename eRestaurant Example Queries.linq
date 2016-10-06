@@ -1,6 +1,6 @@
 <Query Kind="Statements">
   <Connection>
-    <ID>9f311933-f344-45e5-9620-c3568107f3e4</ID>
+    <ID>061b64b0-1e8f-45a0-8bcb-8ff763a1bc97</ID>
     <Persist>true</Persist>
     <Server>.</Server>
     <Database>eRestaurant</Database>
